@@ -9,35 +9,47 @@ import com.varabyte.kobweb.silk.theme.colors.palette.background
 import com.varabyte.kobweb.silk.theme.colors.palette.color
 
 /**
- * @property nearBackground A useful color to apply to a container that should differentiate itself from the background
+ * @property surface0 A useful color to apply to a container that should differentiate itself from the background
  *   but just a little.
  */
 class SitePalette(
-    val nearBackground: Color,
+    val surface0: Color,
+    val surface1: Color,
+    // val surface2: Color,
+    val overlay0: Color,
+    // val overlay1: Color,
+    // val overlay2: Color,
+    val text: Color,
     val cobweb: Color,
     val brand: Brand,
 ) {
     class Brand(
-        val primary: Color = Color.rgb(0x3C83EF),
-        val accent: Color = Color.rgb(0xF3DB5B),
+        val primary: Color = Color.rgb(0xCBA6F7),
+        val accent: Color = Color.rgb(0x89DCEB),
     )
 }
 
 object SitePalettes {
     val light = SitePalette(
-        nearBackground = Color.rgb(0xF4F6FA),
+        surface0 = Color.rgb(0xccd0da),
+        surface1 = Color.rgb(0xbcc0cc),
+        overlay0 = Color.rgb(0x9ca0b0),
+        text = Color.rgb(0x4c4f69),
         cobweb = Colors.LightGray,
         brand = SitePalette.Brand(
-            primary = Color.rgb(0x3C83EF),
-            accent = Color.rgb(0xFCBA03),
+            primary = Color.rgb(0x8839ef),
+            accent = Color.rgb(0x04a5e5),
         )
     )
     val dark = SitePalette(
-        nearBackground = Color.rgb(0x13171F),
+        surface0 = Color.rgb(0x313244),
+        surface1 = Color.rgb(0x45475a),
+        overlay0 = Color.rgb(0x6c7086),
+        text = Color.rgb(0xcdd6f4),
         cobweb = Colors.LightGray.inverted(),
         brand = SitePalette.Brand(
-            primary = Color.rgb(0x3C83EF),
-            accent = Color.rgb(0xF3DB5B),
+            primary = Color.rgb(0xCBA6F7),
+            accent = Color.rgb(0x89DCEB),
         )
     )
 }
@@ -51,8 +63,8 @@ fun ColorMode.toSitePalette(): SitePalette {
 
 @InitSilk
 fun initTheme(ctx: InitSilkContext) {
-    ctx.theme.palettes.light.background = Color.rgb(0xFAFAFA)
-    ctx.theme.palettes.light.color = Colors.Black
-    ctx.theme.palettes.dark.background = Color.rgb(0x06080B)
-    ctx.theme.palettes.dark.color = Colors.White
+    ctx.theme.palettes.light.background = Color.rgb(0xeff1f5)
+    ctx.theme.palettes.light.color = Color.rgb(0x4c4f69)
+    ctx.theme.palettes.dark.background = Color.rgb(0x1e1e2e)
+    ctx.theme.palettes.dark.color = Color.rgb(0xcdd6f4)
 }

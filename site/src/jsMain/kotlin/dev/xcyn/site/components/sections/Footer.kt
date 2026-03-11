@@ -23,7 +23,7 @@ import dev.xcyn.site.toSitePalette
 
 val FooterStyle = CssStyle.base {
     Modifier
-        .backgroundColor(colorMode.toSitePalette().nearBackground)
+        .backgroundColor(colorMode.toSitePalette().surface0)
         .padding(topBottom = 1.5.cssRem, leftRight = 10.percent)
 }
 
@@ -32,23 +32,23 @@ fun Footer(modifier: Modifier = Modifier) {
     Box(FooterStyle.toModifier().then(modifier), contentAlignment = Alignment.Center) {
         Span(Modifier.textAlign(TextAlign.Center).toAttrs()) {
             val sitePalette = ColorMode.current.toSitePalette()
-            SpanText("Built with ")
+            SpanText("Site licensed under ")
             Link(
-                "https://github.com/varabyte/kobweb",
-                "Kobweb",
+                "https://github.com/ilgax/xcyn.dev/blob/main/LICENSE",
+                "MIT",
                 Modifier.setVariable(ColorVar, sitePalette.brand.primary),
                 variant = UncoloredLinkVariant
             )
-            SpanText(", template designed by ")
+            SpanText(" • ")
 
-            // Huge thanks to UI Rocket (https://ui-rocket.com) for putting this great template design together for us!
-            // If you like what you see here and want help building your own site, consider checking out their services.
             Link(
-                "https://ui-rocket.com",
-                "UI Rocket",
+                "https://github.com/ilgax/xcyn.dev",
+                "Source",
                 Modifier.setVariable(ColorVar, sitePalette.brand.accent).whiteSpace(WhiteSpace.NoWrap),
                 variant = UncoloredLinkVariant
             )
+
+            SpanText(" • Made with love, no ai code used <3")
         }
     }
 }

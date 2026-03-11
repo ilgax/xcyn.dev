@@ -3,6 +3,7 @@ package dev.xcyn.site.components.sections
 import androidx.compose.runtime.*
 import com.varabyte.kobweb.browser.dom.ElementTarget
 import com.varabyte.kobweb.compose.css.functions.clamp
+import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.foundation.layout.Spacer
@@ -48,15 +49,29 @@ private fun NavLink(path: String, text: String) {
 private fun MenuItems() {
     NavLink("/", "Home")
     NavLink("/about", "About")
+    NavLink("/tech", "Tech")
 }
 
 @Composable
 private fun ColorModeButton() {
     var colorMode by ColorMode.currentState
-    IconButton(onClick = { colorMode = colorMode.opposite },) {
+    var isHovered by remember { mutableStateOf(false) }
+
+    IconButton(
+        onClick = { colorMode = colorMode.opposite },
+        modifier = Modifier
+            .onMouseEnter { isHovered = true }
+            .onMouseLeave { isHovered = false }
+            .scale(if (isHovered) 1.1f else 1f)
+        ) {
         if (colorMode.isLight) MoonIcon() else SunIcon()
     }
-    Tooltip(ElementTarget.PreviousSibling, "Toggle color mode", placement = PopupPlacement.BottomRight)
+    /*Tooltip(
+        ElementTarget.PreviousSibling,
+        "Toggle theme",
+        placement = PopupPlacement.BottomRight,
+        showDelayMs = 800)
+    */
 }
 
 @Composable
@@ -152,7 +167,7 @@ private fun SideMenu(menuState: SideMenuState, close: () -> Unit, onAnimationEnd
                     // things without moving their finger / cursor much.
                     .padding(top = 1.cssRem, leftRight = 1.cssRem)
                     .gap(1.5.cssRem)
-                    .backgroundColor(ColorMode.current.toSitePalette().nearBackground)
+                    .backgroundColor(ColorMode.current.toSitePalette().surface0)
                     .animation(
                         SideMenuSlideInAnim.toAnimation(
                             duration = 200.ms,

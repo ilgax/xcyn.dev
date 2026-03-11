@@ -87,7 +87,7 @@ fun HomePage() {
             Column(Modifier.gap(2.cssRem)) {
                 Div(HeadlineTextStyle.toAttrs()) {
                     SpanText(
-                        "Use this template as your starting point for ", Modifier.color(
+                        "Hi! ", Modifier.color(
                             when (ColorMode.current) {
                                 ColorMode.LIGHT -> Colors.Black
                                 ColorMode.DARK -> Colors.White

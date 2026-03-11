@@ -10,10 +10,12 @@ import dev.xcyn.site.CircleButtonVariant
 import dev.xcyn.site.UncoloredButtonVariant
 
 @Composable
-fun IconButton(onClick: () -> Unit, content: @Composable () -> Unit) {
+fun IconButton(onClick: () -> Unit,
+               modifier: Modifier = Modifier,
+               content: @Composable () -> Unit) {
     Button(
         onClick = { onClick() },
-        Modifier.setVariable(ButtonVars.FontSize, 1.em), // Make button icon size relative to parent container font size
+        modifier.setVariable(ButtonVars.FontSize, 1.em), // Make button icon size relative to parent container font size
         variant = CircleButtonVariant.then(UncoloredButtonVariant)
     ) {
         content()
