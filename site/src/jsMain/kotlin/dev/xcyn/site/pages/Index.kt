@@ -86,14 +86,8 @@ fun HomePage() {
 
             Column(Modifier.gap(2.cssRem)) {
                 Div(HeadlineTextStyle.toAttrs()) {
-                    SpanText(
-                        "Hi! ", Modifier.color(
-                            when (ColorMode.current) {
-                                ColorMode.LIGHT -> Colors.Black
-                                ColorMode.DARK -> Colors.White
-                            }
-                        )
-                    )
+                    SpanText("Hi, im ", Modifier.color(sitePalette.text))
+
                     SpanText(
                         "Kobweb",
                         Modifier
