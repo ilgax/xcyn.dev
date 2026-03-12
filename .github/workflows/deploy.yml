@@ -69,5 +69,5 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy site/.kobweb/site/dist --project-name=xcyndevsite
+          command: pages deploy site/.kobweb/site --project-name=xcyndevsite
 
