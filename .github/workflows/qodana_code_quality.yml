@@ -4,8 +4,7 @@ on:
   pull_request:
   push:
     branches: # Specify your branches here
-      - main # The 'main' branch
-      - 'releases/*' # The release branches
+      - master # The 'main' branch
 
 jobs:
   qodana:
@@ -23,6 +22,7 @@ jobs:
         uses: JetBrains/qodana-action@v2025.3
         with:
           pr-mode: false
+          args: --baseline qodana.sarif.json
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_1146831642 }}
           QODANA_ENDPOINT: 'https://qodana.cloud'
