@@ -59,6 +59,10 @@ jobs:
           cd site
           ../kobweb-${{ env.KOBWEB_CLI_VERSION }}/bin/kobweb export --notty --layout static
 
+      # Debug
+      - name: List output
+        run: find site/.kobweb -type f | head -50
+
       # D
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
