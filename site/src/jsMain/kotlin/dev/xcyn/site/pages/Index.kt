@@ -14,11 +14,13 @@ import com.varabyte.kobweb.core.data.add
 import com.varabyte.kobweb.core.init.InitRoute
 import com.varabyte.kobweb.core.init.InitRouteContext
 import com.varabyte.kobweb.core.layout.Layout
+import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.components.text.SpanText
 import com.varabyte.kobweb.silk.style.toModifier
 import com.varabyte.kobweb.silk.theme.colors.ColorMode
 import dev.xcyn.site.HeadlineTextStyle
 import dev.xcyn.site.components.layouts.PageLayoutData
+import dev.xcyn.site.components.sections.SocialLinks
 import dev.xcyn.site.toSitePalette
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.web.css.cssRem
@@ -67,7 +69,7 @@ fun HomePage() {
         animatonDone = true
     }
 
-    Column(Modifier.fillMaxWidth().maxWidth(860.px).margin(leftRight = autoLength).gap(1.cssRem).padding(topBottom = 2.cssRem, leftRight = 2.cssRem)) {
+    Column(Modifier.fillMaxWidth().maxWidth(860.px).margin(leftRight = autoLength).gap(1.cssRem).padding(bottom = 2.cssRem, leftRight = 2.cssRem)) {
         //Hero
         Row(
             Modifier.fillMaxWidth().gap(1.cssRem),
@@ -83,11 +85,7 @@ fun HomePage() {
                     "Part time Kotlin nerd, full time gamer · future cybersecurity engineer", Modifier.color(sitePalette.text)
                 )
             }
-        Box(Modifier
-            .size(100.px)
-            .borderRadius(12.px)
-            .backgroundColor(sitePalette.surface0)
-            )
+        Image("/icon.jpg", "pfp", Modifier.size(100.px).borderRadius(12.px))
         }
 
         Box(Modifier.fillMaxWidth().backgroundColor(sitePalette.surface0).padding(1.5.cssRem).borderRadius(12.px)) {
@@ -99,6 +97,9 @@ fun HomePage() {
                     TagChip("He/Him")
                 }
             }
+        }
+        Box(Modifier.backgroundColor(sitePalette.surface0).padding(1.cssRem).borderRadius(12.px)) {
+            SocialLinks()
         }
     }
 }

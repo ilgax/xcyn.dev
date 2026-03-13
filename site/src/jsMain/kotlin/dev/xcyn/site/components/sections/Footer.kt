@@ -1,6 +1,6 @@
 package dev.xcyn.site.components.sections
 
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import com.varabyte.kobweb.compose.css.TextAlign
 import com.varabyte.kobweb.compose.css.WhiteSpace
 import com.varabyte.kobweb.compose.foundation.layout.Box
@@ -16,15 +16,14 @@ import com.varabyte.kobweb.silk.style.base
 import com.varabyte.kobweb.silk.style.toModifier
 import com.varabyte.kobweb.silk.style.vars.color.ColorVar
 import com.varabyte.kobweb.silk.theme.colors.ColorMode
-import org.jetbrains.compose.web.css.cssRem
-import org.jetbrains.compose.web.css.percent
-import org.jetbrains.compose.web.dom.Span
 import dev.xcyn.site.toSitePalette
+import org.jetbrains.compose.web.css.cssRem
+import org.jetbrains.compose.web.dom.Span
 
 val FooterStyle = CssStyle.base {
     Modifier
-        .backgroundColor(colorMode.toSitePalette().surface0)
-        .padding(topBottom = 1.5.cssRem, leftRight = 10.percent)
+        .padding(topBottom = 1.5.cssRem)
+        .scale(0.85)
 }
 
 @Composable
@@ -32,23 +31,25 @@ fun Footer(modifier: Modifier = Modifier) {
     Box(FooterStyle.toModifier().then(modifier), contentAlignment = Alignment.Center) {
         Span(Modifier.textAlign(TextAlign.Center).toAttrs()) {
             val sitePalette = ColorMode.current.toSitePalette()
-            SpanText("Site licensed under ")
             Link(
-                "https://github.com/ilgax/xcyn.dev/blob/main/LICENSE",
+                "https://github.com/ilgax/xcyn.dev/blob/master/LICENSE",
                 "MIT",
-                Modifier.setVariable(ColorVar, sitePalette.brand.primary),
+                Modifier.setVariable(ColorVar, sitePalette.brand.primary).whiteSpace(WhiteSpace.NoWrap),
                 variant = UncoloredLinkVariant
             )
-            SpanText(" • ")
-
+            SpanText(" • ", Modifier.color(sitePalette.subtext))
             Link(
                 "https://github.com/ilgax/xcyn.dev",
                 "Source",
                 Modifier.setVariable(ColorVar, sitePalette.brand.accent).whiteSpace(WhiteSpace.NoWrap),
                 variant = UncoloredLinkVariant
             )
-
-            SpanText(" • Made with love, no ai code used <3")
+            SpanText(" • Made with ", Modifier.whiteSpace(WhiteSpace.NoWrap).color(sitePalette.subtext))
+            var clicked by remember { mutableStateOf(false) }
+            var timesClicked by remember { mutableStateOf(0) }
+            SpanText("❤", Modifier
+                .color(if (timesClicked % 5 == 0 && timesClicked != 0) sitePalette.crust else if (clicked) sitePalette.brand.accent else sitePalette.brand.primary)
+                .onClick { clicked = !clicked; timesClicked++ })
         }
     }
 }

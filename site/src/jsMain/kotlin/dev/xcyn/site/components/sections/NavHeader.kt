@@ -140,7 +140,7 @@ enum class SideMenuState {
 fun NavHeader() {
     Row(
         NavHeaderStyle.toModifier(), verticalAlignment = Alignment.CenterVertically) {
-        Row(Modifier.fillMaxWidth().maxWidth(860.px).margin(leftRight = autoLength).padding(topBottom = 2.cssRem, leftRight = 2.cssRem),verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().maxWidth(860.px).margin(leftRight = autoLength).padding(top = 0.5.cssRem, bottom = 0.px, leftRight = 2.cssRem),verticalAlignment = Alignment.CenterVertically) {
             Row(Modifier.gap(0.5.cssRem).displayIfAtLeast(Breakpoint.MD)) {
                 MenuItems()
 
