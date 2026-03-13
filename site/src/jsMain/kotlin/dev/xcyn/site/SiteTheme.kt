@@ -13,6 +13,9 @@ import com.varabyte.kobweb.silk.theme.colors.palette.color
  *   but just a little.
  */
 class SitePalette(
+    val base: Color,
+    val mantle: Color ,
+    val crust: Color,
     val surface0: Color,
     val surface1: Color,
     // val surface2: Color,
@@ -20,6 +23,7 @@ class SitePalette(
     // val overlay1: Color,
     // val overlay2: Color,
     val text: Color,
+    val subtext: Color,
     val cobweb: Color,
     val brand: Brand,
 ) {
@@ -31,10 +35,14 @@ class SitePalette(
 
 object SitePalettes {
     val light = SitePalette(
+        base = Color.rgb(0xeff1f5),
+        mantle = Color.rgb(0xe6e9ef),
+        crust = Color.rgb(0xdce0e8),
         surface0 = Color.rgb(0xccd0da),
         surface1 = Color.rgb(0xbcc0cc),
         overlay0 = Color.rgb(0x9ca0b0),
         text = Color.rgb(0x4c4f69),
+        subtext = Color.rgb(0x6c6f85),
         cobweb = Colors.LightGray,
         brand = SitePalette.Brand(
             primary = Color.rgb(0x8839ef),
@@ -42,10 +50,14 @@ object SitePalettes {
         )
     )
     val dark = SitePalette(
+        base = Color.rgb(0x1e1e2e),
+        mantle = Color.rgb(0x181825),
+        crust = Color.rgb(0x11111b),
         surface0 = Color.rgb(0x313244),
         surface1 = Color.rgb(0x45475a),
         overlay0 = Color.rgb(0x6c7086),
         text = Color.rgb(0xcdd6f4),
+        subtext = Color.rgb(0xa6adc8),
         cobweb = Colors.LightGray.inverted(),
         brand = SitePalette.Brand(
             primary = Color.rgb(0xCBA6F7),

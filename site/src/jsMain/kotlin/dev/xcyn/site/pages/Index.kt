@@ -1,13 +1,12 @@
 package dev.xcyn.site.pages
 
-import androidx.compose.runtime.Composable
-import com.varabyte.kobweb.compose.css.StyleVariable
+import androidx.compose.runtime.*
+import com.varabyte.kobweb.compose.css.autoLength
+import com.varabyte.kobweb.compose.foundation.layout.Arrangement
 import com.varabyte.kobweb.compose.foundation.layout.Box
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
 import com.varabyte.kobweb.compose.ui.Modifier
-import com.varabyte.kobweb.compose.ui.graphics.Color
-import com.varabyte.kobweb.compose.ui.graphics.Colors
 import com.varabyte.kobweb.compose.ui.modifiers.*
 import com.varabyte.kobweb.compose.ui.toAttrs
 import com.varabyte.kobweb.core.Page
@@ -15,123 +14,91 @@ import com.varabyte.kobweb.core.data.add
 import com.varabyte.kobweb.core.init.InitRoute
 import com.varabyte.kobweb.core.init.InitRouteContext
 import com.varabyte.kobweb.core.layout.Layout
-import com.varabyte.kobweb.core.rememberPageContext
-import com.varabyte.kobweb.silk.components.forms.Button
-import com.varabyte.kobweb.silk.components.navigation.Link
 import com.varabyte.kobweb.silk.components.text.SpanText
-import com.varabyte.kobweb.silk.style.CssStyle
-import com.varabyte.kobweb.silk.style.base
-import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
-import com.varabyte.kobweb.silk.style.breakpoint.displayIfAtLeast
-import com.varabyte.kobweb.silk.style.toAttrs
 import com.varabyte.kobweb.silk.style.toModifier
 import com.varabyte.kobweb.silk.theme.colors.ColorMode
-import com.varabyte.kobweb.silk.theme.colors.ColorPalettes
-import org.jetbrains.compose.web.css.cssRem
-import org.jetbrains.compose.web.css.fr
-import org.jetbrains.compose.web.css.px
-import org.jetbrains.compose.web.css.vh
-import org.jetbrains.compose.web.dom.Div
-import org.jetbrains.compose.web.dom.Text
 import dev.xcyn.site.HeadlineTextStyle
-import dev.xcyn.site.SubheadlineTextStyle
 import dev.xcyn.site.components.layouts.PageLayoutData
 import dev.xcyn.site.toSitePalette
-
-// Container that has a tagline and grid on desktop, and just the tagline on mobile
-val HeroContainerStyle = CssStyle {
-    base { Modifier.fillMaxWidth().gap(2.cssRem) }
-    Breakpoint.MD { Modifier.margin { top(20.vh) } }
-}
-
-// A demo grid that appears on the homepage because it looks good
-val HomeGridStyle = CssStyle.base {
-    Modifier
-        .gap(0.5.cssRem)
-        .width(70.cssRem)
-        .height(18.cssRem)
-}
-
-private val GridCellColorVar by StyleVariable<Color>()
-val HomeGridCellStyle = CssStyle.base {
-    Modifier
-        .backgroundColor(GridCellColorVar.value())
-        .boxShadow(blurRadius = 0.6.cssRem, color = GridCellColorVar.value())
-        .borderRadius(1.cssRem)
-}
-
-@Composable
-private fun GridCell(color: Color, row: Int, column: Int, width: Int? = null, height: Int? = null) {
-    Div(
-        HomeGridCellStyle.toModifier()
-            .setVariable(GridCellColorVar, color)
-            .gridItem(row, column, width, height)
-            .toAttrs()
-    )
-}
-
+import kotlinx.coroutines.delay
+import org.jetbrains.compose.web.css.cssRem
+import org.jetbrains.compose.web.css.px
+import org.jetbrains.compose.web.dom.Div
 
 @InitRoute
 fun initHomePage(ctx: InitRouteContext) {
     ctx.data.add(PageLayoutData("Home"))
 }
 
+@Composable
+fun TagChip(text: String) {
+    val sitePalette = ColorMode.current.toSitePalette()
+    Box(Modifier.backgroundColor(sitePalette.surface1).padding(0.5.cssRem).borderRadius(6.px)) {
+        SpanText(text, Modifier.color(sitePalette.text).fontSize(0.9.cssRem))
+    }
+}
+
 @Page
 @Layout(".components.layouts.PageLayout")
 @Composable
 fun HomePage() {
-    Row(HeroContainerStyle.toModifier()) {
-        Box {
-            val sitePalette = ColorMode.current.toSitePalette()
+    var displayName by remember { mutableStateOf("") }
+    val sitePalette = ColorMode.current.toSitePalette()
+    var animatonDone by remember { mutableStateOf(false) }
 
-            Column(Modifier.gap(2.cssRem)) {
-                Div(HeadlineTextStyle.toAttrs()) {
-                    SpanText("Hi, im ", Modifier.color(sitePalette.text))
+    LaunchedEffect(Unit) {
+        val fullName = "xcynical"
+        val shortName = "xcyn"
 
-                    SpanText(
-                        "Kobweb",
-                        Modifier
-                            .color(sitePalette.brand.accent)
-                            // Use a shadow so this light-colored word is more visible in light mode
-                            .textShadow(0.px, 0.px, blurRadius = 0.5.cssRem, color = Colors.Gray)
-                    )
-                }
+        delay(400)
 
-                Div(SubheadlineTextStyle.toAttrs()) {
-                    SpanText("You can read the ")
-                    Link("/about", "About")
-                    SpanText(" page for more information.")
-                }
-
-                val ctx = rememberPageContext()
-                Button(onClick = {
-                    // Change this click handler with your call-to-action behavior
-                    // here. Link to an order page? Open a calendar UI? Play a movie?
-                    // Up to you!
-                    ctx.router.tryRoutingTo("/about")
-                }, colorPalette = ColorPalettes.Blue) {
-                    Text("This could be your CTA")
-                }
-            }
+        for (i in fullName.indices) {
+            displayName = fullName.substring(0, i + 1)
+            delay(120)
         }
 
-        Div(
-            HomeGridStyle
-            .toModifier()
-            .displayIfAtLeast(Breakpoint.MD)
-            .grid {
-                rows { repeat(3) { size(1.fr) } }
-                columns { repeat(5) { size(1.fr) } }
-            }
-            .toAttrs()
+        delay(1600)
+
+        for (i in fullName.length downTo shortName.length) {
+            displayName = fullName.substring(0, i)
+            delay(80)
+        }
+        delay(300)
+        animatonDone = true
+    }
+
+    Column(Modifier.fillMaxWidth().maxWidth(860.px).margin(leftRight = autoLength).gap(1.cssRem).padding(topBottom = 2.cssRem, leftRight = 2.cssRem)) {
+        //Hero
+        Row(
+            Modifier.fillMaxWidth().gap(1.cssRem),
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            val sitePalette = ColorMode.current.toSitePalette()
-            GridCell(sitePalette.brand.primary, 1, 1, 2, 2)
-            GridCell(ColorPalettes.Monochrome._600, 1, 3)
-            GridCell(ColorPalettes.Monochrome._100, 1, 4, width = 2)
-            GridCell(sitePalette.brand.accent, 2, 3, width = 2)
-            GridCell(ColorPalettes.Monochrome._300, 2, 5)
-            GridCell(ColorPalettes.Monochrome._800, 3, 1, width = 5)
+            Column(Modifier.gap(0.5.cssRem)) {
+                Div(HeadlineTextStyle.toModifier().toAttrs()) {
+                    SpanText("Hi, I'm ", Modifier.color(sitePalette.text))
+                    SpanText(displayName + if (animatonDone) "!" else "", Modifier.color(sitePalette.brand.primary))
+                }
+
+                SpanText(
+                    "Part time Kotlin nerd, full time gamer · future cybersecurity engineer", Modifier.color(sitePalette.text)
+                )
+            }
+        Box(Modifier
+            .size(100.px)
+            .borderRadius(12.px)
+            .backgroundColor(sitePalette.surface0)
+            )
+        }
+
+        Box(Modifier.fillMaxWidth().backgroundColor(sitePalette.surface0).padding(1.5.cssRem).borderRadius(12.px)) {
+            Column(Modifier.gap(1.cssRem)) {
+                SpanText("About", Modifier.color(sitePalette.text).fontSize(0.9.cssRem))
+                SpanText("17 year old guy from Turkey.", Modifier.color(sitePalette.subtext))
+                SpanText("TODO", Modifier.color(sitePalette.text))
+                Row(Modifier.gap(0.5.cssRem)) {
+                    TagChip("He/Him")
+                }
+            }
         }
     }
 }

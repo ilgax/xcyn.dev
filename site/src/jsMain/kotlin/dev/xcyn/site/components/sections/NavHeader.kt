@@ -1,6 +1,8 @@
 package dev.xcyn.site.components.sections
 
 import androidx.compose.runtime.*
+import com.varabyte.kobweb.compose.css.FontWeight
+import com.varabyte.kobweb.compose.css.autoLength
 import com.varabyte.kobweb.compose.css.functions.clamp
 import com.varabyte.kobweb.compose.foundation.layout.Column
 import com.varabyte.kobweb.compose.foundation.layout.Row
@@ -9,7 +11,8 @@ import com.varabyte.kobweb.compose.ui.Alignment
 import com.varabyte.kobweb.compose.ui.Modifier
 import com.varabyte.kobweb.compose.ui.graphics.Colors
 import com.varabyte.kobweb.compose.ui.modifiers.*
-import com.varabyte.kobweb.silk.components.graphics.Image
+import com.varabyte.kobweb.compose.ui.styleModifier
+import com.varabyte.kobweb.core.rememberPageContext
 import com.varabyte.kobweb.silk.components.icons.CloseIcon
 import com.varabyte.kobweb.silk.components.icons.HamburgerIcon
 import com.varabyte.kobweb.silk.components.icons.MoonIcon
@@ -26,19 +29,41 @@ import com.varabyte.kobweb.silk.style.base
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import com.varabyte.kobweb.silk.style.breakpoint.displayIfAtLeast
 import com.varabyte.kobweb.silk.style.breakpoint.displayUntil
+import com.varabyte.kobweb.silk.style.selectors.hover
 import com.varabyte.kobweb.silk.style.toModifier
 import com.varabyte.kobweb.silk.theme.colors.ColorMode
-import org.jetbrains.compose.web.css.*
 import dev.xcyn.site.components.widgets.IconButton
 import dev.xcyn.site.toSitePalette
+import org.jetbrains.compose.web.css.*
 
 val NavHeaderStyle = CssStyle.base {
-    Modifier.fillMaxWidth().padding(1.cssRem)
+    Modifier.fillMaxWidth()
+}
+
+val NavLinkStyle = CssStyle {
+    val sitePalette = colorMode.toSitePalette()
+    base {
+        Modifier
+            .padding(topBottom = 0.4.cssRem, leftRight = 0.9.cssRem)
+            .borderRadius(12.px)
+            .color(sitePalette.text)
+            .border(1.px, LineStyle.Solid, sitePalette.surface1)
+            .styleModifier { property("transition", "color 200ms") }
+    }
+    hover {
+        Modifier.color(sitePalette.brand.accent)
+    }
 }
 
 @Composable
 private fun NavLink(path: String, text: String) {
-    Link(path, text, variant = UndecoratedLinkVariant.then(UncoloredLinkVariant))
+    val ctx = rememberPageContext()
+    val isActive = ctx.route.path == path
+
+    Link(path, text, NavLinkStyle.toModifier()
+            .then(if (isActive) Modifier.fontWeight(FontWeight.Bold) else Modifier),
+        variant = UndecoratedLinkVariant.then(UncoloredLinkVariant)
+    )
 }
 
 @Composable
@@ -52,13 +77,16 @@ private fun MenuItems() {
 private fun ColorModeButton() {
     var colorMode by ColorMode.currentState
     var isHovered by remember { mutableStateOf(false) }
+    var degrees by remember { mutableStateOf(0) }
 
     IconButton(
-        onClick = { colorMode = colorMode.opposite },
+        onClick = { colorMode = colorMode.opposite; degrees = 0 },
         modifier = Modifier
-            .onMouseEnter { isHovered = true }
+            .onMouseEnter { isHovered = true; degrees += 2 }
             .onMouseLeave { isHovered = false }
+            .rotate(degrees.deg)
             .scale(if (isHovered) 1.1f else 1f)
+            .styleModifier { property("transition", "transform 200ms") }
         ) {
         if (colorMode.isLight) MoonIcon() else SunIcon()
     }
@@ -110,37 +138,35 @@ enum class SideMenuState {
 
 @Composable
 fun NavHeader() {
-    Row(NavHeaderStyle.toModifier(), verticalAlignment = Alignment.CenterVertically) {
-        Link("https://kobweb.varabyte.com") {
-            // Block display overrides inline display of the <img> tag, so it calculates centering better
-            Image("/kobweb-logo.png", "Kobweb Logo", Modifier.height(2.cssRem).display(DisplayStyle.Block))
-        }
+    Row(
+        NavHeaderStyle.toModifier(), verticalAlignment = Alignment.CenterVertically) {
+        Row(Modifier.fillMaxWidth().maxWidth(860.px).margin(leftRight = autoLength).padding(topBottom = 2.cssRem, leftRight = 2.cssRem),verticalAlignment = Alignment.CenterVertically) {
+            Row(Modifier.gap(0.5.cssRem).displayIfAtLeast(Breakpoint.MD)) {
+                MenuItems()
 
-        Spacer()
-
-        Row(Modifier.gap(1.5.cssRem).displayIfAtLeast(Breakpoint.MD), verticalAlignment = Alignment.CenterVertically) {
-            MenuItems()
+            }
+            Spacer()
             ColorModeButton()
-        }
 
-        Row(
-            Modifier
-                .fontSize(1.5.cssRem)
-                .gap(1.cssRem)
-                .displayUntil(Breakpoint.MD),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            var menuState by remember { mutableStateOf(SideMenuState.CLOSED) }
+            Row(
+                Modifier
+                    .fontSize(1.5.cssRem)
+                    .gap(1.cssRem)
+                    .displayUntil(Breakpoint.MD),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                var menuState by remember { mutableStateOf(SideMenuState.CLOSED) }
 
-            ColorModeButton()
-            HamburgerButton(onClick =  { menuState = SideMenuState.OPEN })
+                ColorModeButton()
+                HamburgerButton(onClick =  { menuState = SideMenuState.OPEN })
 
-            if (menuState != SideMenuState.CLOSED) {
-                SideMenu(
-                    menuState,
-                    close = { menuState = menuState.close() },
-                    onAnimationEnd = { if (menuState == SideMenuState.CLOSING) menuState = SideMenuState.CLOSED }
-                )
+                if (menuState != SideMenuState.CLOSED) {
+                    SideMenu(
+                        menuState,
+                        close = { menuState = menuState.close() },
+                        onAnimationEnd = { if (menuState == SideMenuState.CLOSING) menuState = SideMenuState.CLOSED }
+                    )
+                }
             }
         }
     }
