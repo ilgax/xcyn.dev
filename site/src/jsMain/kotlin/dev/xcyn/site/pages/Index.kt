@@ -85,7 +85,7 @@ fun HomePage() {
                     "Part time Kotlin nerd, full time gamer · future cybersecurity engineer", Modifier.color(sitePalette.text)
                 )
             }
-        Image("/icon.jpg", "pfp", Modifier.size(100.px).borderRadius(12.px))
+        Image("/pfp.png", "pfp", Modifier.size(100.px).borderRadius(12.px))
         }
 
         Box(Modifier.fillMaxWidth().backgroundColor(sitePalette.surface0).padding(1.5.cssRem).borderRadius(12.px)) {
